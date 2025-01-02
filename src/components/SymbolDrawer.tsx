@@ -3,7 +3,13 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { findSimilarSymbols } from "@/data/sf-symbols";
-import { Download, Copy, X } from "lucide-react";
+import { Download, Copy, ChevronDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface SymbolDrawerProps {
   symbol: any;
@@ -17,83 +23,86 @@ export const SymbolDrawer = ({ symbol, onClose }: SymbolDrawerProps) => {
 
   const similarSymbols = findSimilarSymbols(symbol.name);
 
-  const downloadSymbol = (format: string) => {
-    // Implementation for downloading in different formats
+  const handleDownload = (format = 'svg') => {
     console.log(`Downloading ${symbol.name} in ${format} format`);
   };
 
-  const copySymbol = (format: string) => {
-    // Implementation for copying in different formats
+  const handleCopy = (format = 'svg') => {
     console.log(`Copying ${symbol.name} in ${format} format`);
   };
 
   return (
     <Sheet open={!!symbol} onOpenChange={() => onClose()}>
       <SheetContent side="bottom" className="h-[80vh]">
-        <div className="h-full overflow-y-auto">
+        <div className="h-full overflow-y-auto px-1">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold">{symbol.name}</h2>
-            <Button variant="ghost" size="icon" onClick={onClose}>
-              <X className="h-4 w-4" />
-            </Button>
+            <h2 className="text-2xl font-semibold tracking-tight">{symbol.name}</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <div className="w-32 h-32 mx-auto mb-6">
+              <div className="aspect-square w-32 h-32 mx-auto mb-6 bg-accent/50 rounded-xl p-6 flex items-center justify-center">
                 <img 
                   src={symbol.svg} 
                   alt={symbol.name}
+                  className="w-full h-full dark:invert"
                   style={{ filter: `opacity(1) drop-shadow(0 0 0 ${color})` }}
-                  className="w-full h-full"
                 />
               </div>
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Color</label>
+                  <label className="text-sm font-medium mb-2 block">Color</label>
                   <Input
                     type="color"
                     value={color}
                     onChange={(e) => setColor(e.target.value)}
-                    className="w-full"
+                    className="w-full h-10"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <h3 className="text-sm font-medium mb-2">Download</h3>
-                    <div className="space-y-2">
-                      {["SVG", "PNG", "JPG"].map((format) => (
-                        <Button
-                          key={format}
-                          variant="outline"
-                          className="w-full"
-                          onClick={() => downloadSymbol(format)}
-                        >
-                          <Download className="h-4 w-4 mr-2" />
-                          {format}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-sm font-medium mb-2">Copy</h3>
-                    <div className="space-y-2">
-                      {["SVG", "PNG", "JPG"].map((format) => (
-                        <Button
-                          key={format}
-                          variant="outline"
-                          className="w-full"
-                          onClick={() => copySymbol(format)}
-                        >
-                          <Copy className="h-4 w-4 mr-2" />
-                          {format}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="w-full">
+                        <Download className="mr-2 h-4 w-4" />
+                        Download
+                        <ChevronDown className="ml-2 h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={() => handleDownload('svg')}>
+                        SVG
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDownload('png')}>
+                        PNG
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDownload('jpg')}>
+                        JPG
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="w-full">
+                        <Copy className="mr-2 h-4 w-4" />
+                        Copy
+                        <ChevronDown className="ml-2 h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={() => handleCopy('svg')}>
+                        SVG
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleCopy('png')}>
+                        PNG
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleCopy('jpg')}>
+                        JPG
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
             </div>
@@ -104,9 +113,9 @@ export const SymbolDrawer = ({ symbol, onClose }: SymbolDrawerProps) => {
                 {similarSymbols.map((similar) => (
                   <div
                     key={similar.id}
-                    className="p-4 rounded-lg hover:bg-gray-100 transition-colors duration-200 aspect-square flex items-center justify-center"
+                    className="p-4 rounded-xl bg-accent/50 hover:bg-accent transition-colors duration-200 aspect-square flex items-center justify-center"
                   >
-                    <img src={similar.svg} alt={similar.name} className="w-8 h-8" />
+                    <img src={similar.svg} alt={similar.name} className="w-8 h-8 dark:invert" />
                   </div>
                 ))}
               </div>

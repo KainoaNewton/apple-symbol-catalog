@@ -11,14 +11,21 @@ export const SymbolGrid = ({ symbols }: SymbolGridProps) => {
 
   return (
     <>
-      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4 p-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
         {symbols.map((symbol) => (
           <button
             key={symbol.id}
             onClick={() => setSelectedSymbol(symbol)}
-            className="p-4 rounded-lg hover:bg-gray-100 transition-colors duration-200 aspect-square flex items-center justify-center"
+            className="p-4 rounded-xl hover:bg-accent/50 transition-colors duration-200 aspect-square flex items-center justify-center group relative"
           >
-            <img src={symbol.svg} alt={symbol.name} className="w-8 h-8" />
+            <img 
+              src={symbol.svg} 
+              alt={symbol.name} 
+              className="w-8 h-8 dark:invert group-hover:scale-110 transition-transform duration-200" 
+            />
+            <div className="absolute bottom-1 left-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              <p className="text-xs truncate text-muted-foreground">{symbol.name}</p>
+            </div>
           </button>
         ))}
       </div>
