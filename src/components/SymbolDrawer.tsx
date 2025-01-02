@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { findSimilarSymbols } from "@/data/sf-symbols";
-import { Download, Copy, FileCode } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useTheme } from "@/components/ThemeProvider";
+import { findSimilarSymbols } from "@/data/sf-symbols";
+import { SymbolPreview } from "./SymbolPreview";
+import { SymbolActions } from "./SymbolActions";
+import { SimilarSymbols } from "./SimilarSymbols";
 
 interface SymbolDrawerProps {
   symbol: any;
@@ -16,7 +15,6 @@ interface SymbolDrawerProps {
 export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerProps) => {
   const [color, setColor] = useState("#000000");
   const { toast } = useToast();
-  const { theme } = useTheme();
   
   if (!symbol) return null;
 
@@ -89,80 +87,23 @@ export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerPro
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <div className="aspect-square w-32 h-32 mx-auto mb-6 bg-accent/50 rounded-xl p-6 flex items-center justify-center">
-                <img 
-                  src={symbol.svg} 
-                  alt={symbol.name}
-                  style={{ 
-                    filter: color === "#000000" ? (theme === 'dark' ? 'invert(1)' : 'brightness(0)') : 'none',
-                    fill: color !== "#000000" ? color : undefined
-                  }}
-                />
-              </div>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Color</label>
-                  <Input
-                    type="color"
-                    value={color}
-                    onChange={(e) => setColor(e.target.value)}
-                    className="w-full h-10"
-                  />
-                </div>
-
-                <div className="grid grid-cols-3 gap-4">
-                  <Button 
-                    variant="outline" 
-                    onClick={handleDownload}
-                    className="w-full"
-                  >
-                    <Download className="mr-2 h-4 w-4" />
-                    Download
-                  </Button>
-
-                  <Button 
-                    variant="outline" 
-                    onClick={() => handleCopy("html")}
-                    className="w-full"
-                  >
-                    <FileCode className="mr-2 h-4 w-4" />
-                    Copy HTML
-                  </Button>
-
-                  <Button 
-                    variant="outline" 
-                    onClick={() => handleCopy("svg")}
-                    className="w-full"
-                  >
-                    <Copy className="mr-2 h-4 w-4" />
-                    Copy SVG
-                  </Button>
-                </div>
-              </div>
+            <div className="space-y-4">
+              <SymbolPreview 
+                symbol={symbol} 
+                color={color} 
+                onColorChange={setColor} 
+              />
+              <SymbolActions 
+                onDownload={handleDownload}
+                onCopyHtml={() => handleCopy("html")}
+                onCopySvg={() => handleCopy("svg")}
+              />
             </div>
 
-            <div>
-              <h3 className="text-lg font-medium mb-4">Similar Symbols</h3>
-              <div className="grid grid-cols-4 gap-4">
-                {similarSymbols.map((similar) => (
-                  <button
-                    key={similar.id}
-                    onClick={() => onSymbolClick(similar)}
-                    className="p-4 rounded-xl bg-accent/50 hover:bg-accent transition-colors duration-200 aspect-square flex items-center justify-center"
-                  >
-                    <img 
-                      src={similar.svg} 
-                      alt={similar.name} 
-                      style={{ 
-                        filter: theme === 'dark' ? 'invert(1)' : 'brightness(0)'
-                      }}
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
+            <SimilarSymbols 
+              symbols={similarSymbols} 
+              onSymbolClick={onSymbolClick} 
+            />
           </div>
         </div>
       </SheetContent>
