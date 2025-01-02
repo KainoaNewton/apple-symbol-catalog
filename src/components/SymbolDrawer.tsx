@@ -26,9 +26,7 @@ export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerPro
     try {
       const response = await fetch(symbol.svg);
       let svgText = await response.text();
-      if (color !== "#000000") {
-        svgText = svgText.replace(/fill="([^"]*)"/, `fill="${color}"`);
-      }
+      svgText = svgText.replace(/fill="([^"]*)"/, `fill="${color}"`);
       const blob = new Blob([svgText], { type: 'image/svg+xml' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -56,10 +54,7 @@ export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerPro
     try {
       const response = await fetch(symbol.svg);
       let svgText = await response.text();
-      
-      if (color !== "#000000") {
-        svgText = svgText.replace(/fill="([^"]*)"/, `fill="${color}"`);
-      }
+      svgText = svgText.replace(/fill="([^"]*)"/, `fill="${color}"`);
 
       if (type === "svg") {
         const blob = new Blob([svgText], { type: 'image/svg+xml' });
@@ -99,9 +94,8 @@ export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerPro
                   src={symbol.svg} 
                   alt={symbol.name}
                   style={{ 
-                    filter: theme === 'dark' 
-                      ? 'invert(1)' 
-                      : 'brightness(0) saturate(100%)'
+                    filter: theme === 'dark' ? 'invert(1)' : 'none',
+                    fill: color
                   }}
                 />
               </div>
@@ -161,9 +155,7 @@ export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerPro
                       src={similar.svg} 
                       alt={similar.name} 
                       style={{ 
-                        filter: theme === 'dark' 
-                          ? 'invert(1)' 
-                          : 'brightness(0) saturate(100%)'
+                        filter: theme === 'dark' ? 'invert(1)' : 'none'
                       }}
                     />
                   </button>
