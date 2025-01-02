@@ -1,12 +1,24 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { SearchBar } from "@/components/SearchBar";
+import { SymbolGrid } from "@/components/SymbolGrid";
+import { searchSymbols } from "@/utils/search";
 
 const Index = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const symbols = searchSymbols(searchQuery);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-14 items-center">
+          <h1 className="text-xl font-bold">SF Symbols Catalog</h1>
+        </div>
+      </header>
+
+      <main className="container py-6">
+        <SearchBar value={searchQuery} onChange={setSearchQuery} />
+        <SymbolGrid symbols={symbols} />
+      </main>
     </div>
   );
 };
