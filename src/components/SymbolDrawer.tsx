@@ -5,16 +5,6 @@ import { Input } from "@/components/ui/input";
 import { findSimilarSymbols } from "@/data/sf-symbols";
 import { Download, Copy, FileCode } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { useTheme } from "@/components/ThemeProvider";
 
 interface SymbolDrawerProps {
@@ -24,9 +14,6 @@ interface SymbolDrawerProps {
 
 export const SymbolDrawer = ({ symbol, onClose }: SymbolDrawerProps) => {
   const [color, setColor] = useState("#000000");
-  const [showDownloadDialog, setShowDownloadDialog] = useState(false);
-  const [showCopyDialog, setShowCopyDialog] = useState(false);
-  const [copyType, setCopyType] = useState<"html" | "svg">(null);
   const { toast } = useToast();
   const { theme } = useTheme();
   
@@ -63,7 +50,6 @@ export const SymbolDrawer = ({ symbol, onClose }: SymbolDrawerProps) => {
         variant: "destructive",
       });
     }
-    setShowDownloadDialog(false);
   };
 
   const handleCopy = async (type: "html" | "svg") => {
@@ -89,128 +75,89 @@ export const SymbolDrawer = ({ symbol, onClose }: SymbolDrawerProps) => {
         variant: "destructive",
       });
     }
-    setShowCopyDialog(false);
   };
 
   return (
-    <>
-      <AlertDialog open={showDownloadDialog} onOpenChange={setShowDownloadDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Download SVG</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to download this SVG?
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDownload}>Download</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+    <Sheet open={!!symbol} onOpenChange={() => onClose()}>
+      <SheetContent side="bottom" className="h-[80vh]">
+        <div className="h-full overflow-y-auto px-1">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-semibold tracking-tight">{symbol.name}</h2>
+          </div>
 
-      <AlertDialog open={showCopyDialog} onOpenChange={setShowCopyDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Copy SVG</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to copy this SVG {copyType === "html" ? "HTML" : "code"}?
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => handleCopy(copyType)}>Copy</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <Sheet open={!!symbol} onOpenChange={() => onClose()}>
-        <SheetContent side="bottom" className="h-[80vh]">
-          <div className="h-full overflow-y-auto px-1">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold tracking-tight">{symbol.name}</h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <div className="aspect-square w-32 h-32 mx-auto mb-6 bg-accent/50 rounded-xl p-6 flex items-center justify-center">
-                  <img 
-                    src={symbol.svg} 
-                    alt={symbol.name}
-                    className={theme === "dark" ? "invert" : ""}
-                    style={{ filter: `opacity(1) drop-shadow(0 0 0 ${color})` }}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <div className="aspect-square w-32 h-32 mx-auto mb-6 bg-accent/50 rounded-xl p-6 flex items-center justify-center">
+                <img 
+                  src={symbol.svg} 
+                  alt={symbol.name}
+                  className={theme === "dark" ? "invert" : ""}
+                  style={{ filter: `opacity(1) drop-shadow(0 0 0 ${color})` }}
+                />
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Color</label>
+                  <Input
+                    type="color"
+                    value={color}
+                    onChange={(e) => setColor(e.target.value)}
+                    className="w-full h-10"
                   />
                 </div>
-                
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">Color</label>
-                    <Input
-                      type="color"
-                      value={color}
-                      onChange={(e) => setColor(e.target.value)}
-                      className="w-full h-10"
-                    />
-                  </div>
 
-                  <div className="grid grid-cols-3 gap-4">
-                    <Button 
-                      variant="outline" 
-                      onClick={() => setShowDownloadDialog(true)}
-                      className="w-full"
-                    >
-                      <Download className="mr-2 h-4 w-4" />
-                      Download
-                    </Button>
+                <div className="grid grid-cols-3 gap-4">
+                  <Button 
+                    variant="outline" 
+                    onClick={handleDownload}
+                    className="w-full"
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    Download
+                  </Button>
 
-                    <Button 
-                      variant="outline" 
-                      onClick={() => {
-                        setCopyType("html");
-                        setShowCopyDialog(true);
-                      }}
-                      className="w-full"
-                    >
-                      <FileCode className="mr-2 h-4 w-4" />
-                      Copy HTML
-                    </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => handleCopy("html")}
+                    className="w-full"
+                  >
+                    <FileCode className="mr-2 h-4 w-4" />
+                    Copy HTML
+                  </Button>
 
-                    <Button 
-                      variant="outline" 
-                      onClick={() => {
-                        setCopyType("svg");
-                        setShowCopyDialog(true);
-                      }}
-                      className="w-full"
-                    >
-                      <Copy className="mr-2 h-4 w-4" />
-                      Copy SVG
-                    </Button>
-                  </div>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => handleCopy("svg")}
+                    className="w-full"
+                  >
+                    <Copy className="mr-2 h-4 w-4" />
+                    Copy SVG
+                  </Button>
                 </div>
               </div>
+            </div>
 
-              <div>
-                <h3 className="text-lg font-medium mb-4">Similar Symbols</h3>
-                <div className="grid grid-cols-4 gap-4">
-                  {similarSymbols.map((similar) => (
-                    <div
-                      key={similar.id}
-                      className="p-4 rounded-xl bg-accent/50 hover:bg-accent transition-colors duration-200 aspect-square flex items-center justify-center"
-                    >
-                      <img 
-                        src={similar.svg} 
-                        alt={similar.name} 
-                        className={theme === "dark" ? "invert" : ""}
-                      />
-                    </div>
-                  ))}
-                </div>
+            <div>
+              <h3 className="text-lg font-medium mb-4">Similar Symbols</h3>
+              <div className="grid grid-cols-4 gap-4">
+                {similarSymbols.map((similar) => (
+                  <div
+                    key={similar.id}
+                    className="p-4 rounded-xl bg-accent/50 hover:bg-accent transition-colors duration-200 aspect-square flex items-center justify-center"
+                  >
+                    <img 
+                      src={similar.svg} 
+                      alt={similar.name} 
+                      className={theme === "dark" ? "invert" : ""}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-        </SheetContent>
-      </Sheet>
-    </>
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 };
