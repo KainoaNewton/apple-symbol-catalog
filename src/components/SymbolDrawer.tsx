@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
 import { findSimilarSymbols } from "@/data/sf-symbols";
@@ -13,7 +12,6 @@ interface SymbolDrawerProps {
 }
 
 export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerProps) => {
-  const [color, setColor] = useState("#ffffff");
   const { toast } = useToast();
   
   if (!symbol) return null;
@@ -23,8 +21,7 @@ export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerPro
   const handleDownload = async () => {
     try {
       const response = await fetch(symbol.svg);
-      let svgText = await response.text();
-      svgText = svgText.replace(/fill="([^"]*)"/, `fill="${color}"`);
+      const svgText = await response.text();
       const blob = new Blob([svgText], { type: 'image/svg+xml' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -48,21 +45,15 @@ export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerPro
     }
   };
 
-  const handleCopy = async (type: "html" | "svg") => {
+  const handleCopyHtml = async () => {
     try {
       const response = await fetch(symbol.svg);
-      let svgText = await response.text();
-      svgText = svgText.replace(/fill="([^"]*)"/, `fill="${color}"`);
-
-      if (type === "svg") {
-        await navigator.clipboard.writeText(svgText);
-      } else {
-        await navigator.clipboard.writeText(svgText);
-      }
+      const svgText = await response.text();
+      await navigator.clipboard.writeText(svgText);
       
       toast({
         title: "Success",
-        description: `${type === "html" ? "SVG HTML" : "SVG"} copied to clipboard`,
+        description: "SVG HTML copied to clipboard",
       });
     } catch (error) {
       toast({
@@ -83,15 +74,10 @@ export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerPro
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-4">
-              <SymbolPreview 
-                symbol={symbol} 
-                color={color} 
-                onColorChange={setColor} 
-              />
+              <SymbolPreview symbol={symbol} />
               <SymbolActions 
                 onDownload={handleDownload}
-                onCopyHtml={() => handleCopy("html")}
-                onCopySvg={() => handleCopy("svg")}
+                onCopyHtml={handleCopyHtml}
               />
             </div>
 

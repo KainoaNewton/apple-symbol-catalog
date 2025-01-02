@@ -1,16 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { Download, Copy, FileCode } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Download, FileCode } from "lucide-react";
 
 interface SymbolActionsProps {
   onDownload: () => Promise<void>;
   onCopyHtml: () => Promise<void>;
-  onCopySvg: () => Promise<void>;
 }
 
-export const SymbolActions = ({ onDownload, onCopyHtml, onCopySvg }: SymbolActionsProps) => {
+export const SymbolActions = ({ onDownload, onCopyHtml }: SymbolActionsProps) => {
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-2 gap-4">
       <Button 
         variant="outline" 
         onClick={onDownload}
@@ -26,16 +24,7 @@ export const SymbolActions = ({ onDownload, onCopyHtml, onCopySvg }: SymbolActio
         className="w-full"
       >
         <FileCode className="mr-2 h-4 w-4" />
-        Copy HTML
-      </Button>
-
-      <Button 
-        variant="outline" 
-        onClick={onCopySvg}
-        className="w-full"
-      >
-        <Copy className="mr-2 h-4 w-4" />
-        Copy SVG
+        Copy SVG HTML
       </Button>
     </div>
   );
