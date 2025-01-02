@@ -3,7 +3,6 @@ declare module "*.json" {
     id: string;
     name: string;
     svg: string;
-    tags: string[];
   }[];
   export default value;
 }

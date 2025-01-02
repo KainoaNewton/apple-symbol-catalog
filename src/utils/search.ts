@@ -2,7 +2,7 @@ import Fuse from "fuse.js";
 import { sfSymbols } from "@/data/sf-symbols";
 
 const fuse = new Fuse(sfSymbols, {
-  keys: ["name", "tags"],
+  keys: ["name"],
   threshold: 0.3,
 });
 
