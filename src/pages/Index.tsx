@@ -8,8 +8,13 @@ import { useTheme } from "@/components/ThemeProvider";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const { setTheme, theme } = useTheme();
-  const symbols = searchSymbols(searchQuery);
+  const { symbols, totalPages } = searchSymbols(searchQuery, currentPage);
+
+  const handleLoadMore = () => {
+    setCurrentPage(prev => Math.min(prev + 1, totalPages));
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -27,8 +32,22 @@ const Index = () => {
       </header>
 
       <main className="container py-6">
-        <SearchBar value={searchQuery} onChange={setSearchQuery} />
+        <SearchBar value={searchQuery} onChange={(value) => {
+          setSearchQuery(value);
+          setCurrentPage(1); // Reset to first page on new search
+        }} />
         <SymbolGrid symbols={symbols} />
+        {currentPage < totalPages && (
+          <div className="mt-8 flex justify-center">
+            <Button 
+              variant="outline"
+              onClick={handleLoadMore}
+              className="w-full max-w-xs"
+            >
+              Load More Symbols
+            </Button>
+          </div>
+        )}
       </main>
     </div>
   );
