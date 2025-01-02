@@ -55,20 +55,20 @@ export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerPro
   const handleCopy = async (type: "html" | "svg") => {
     try {
       const response = await fetch(symbol.svg);
-      let text = await response.text();
+      let svgText = await response.text();
       
       if (color !== "#000000") {
-        text = text.replace(/fill="([^"]*)"/, `fill="${color}"`);
+        svgText = svgText.replace(/fill="([^"]*)"/, `fill="${color}"`);
       }
 
       if (type === "svg") {
-        // Create a blob and copy it to the clipboard as a file
-        const blob = new Blob([text], { type: 'image/svg+xml' });
-        const item = new ClipboardItem({ "image/svg+xml": blob });
-        await navigator.clipboard.write([item]);
+        const blob = new Blob([svgText], { type: 'image/svg+xml' });
+        const clipboardItem = new ClipboardItem({
+          'image/svg+xml': blob
+        });
+        await navigator.clipboard.write([clipboardItem]);
       } else {
-        // Copy as HTML
-        await navigator.clipboard.writeText(text);
+        await navigator.clipboard.writeText(svgText);
       }
       
       toast({
