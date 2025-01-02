@@ -23,11 +23,9 @@ export const SymbolGrid = ({ symbols }: SymbolGridProps) => {
             <img 
               src={symbol.svg} 
               alt={symbol.name} 
-              className={`w-8 h-8 group-hover:scale-110 transition-transform duration-200 ${theme === 'dark' ? 'invert' : ''}`}
+              className="w-8 h-8 group-hover:scale-110 transition-transform duration-200"
               style={{ 
-                filter: theme === 'dark' 
-                  ? 'invert(1)' 
-                  : 'brightness(0) saturate(100%)' // Makes symbols darker in light mode
+                filter: theme === 'dark' ? 'invert(1)' : 'brightness(0)',
               }}
             />
             <div className="absolute bottom-1 left-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">

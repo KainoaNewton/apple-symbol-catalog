@@ -94,8 +94,8 @@ export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerPro
                   src={symbol.svg} 
                   alt={symbol.name}
                   style={{ 
-                    filter: theme === 'dark' ? 'invert(1)' : 'none',
-                    fill: color
+                    filter: color === "#000000" ? (theme === 'dark' ? 'invert(1)' : 'brightness(0)') : 'none',
+                    fill: color !== "#000000" ? color : undefined
                   }}
                 />
               </div>
@@ -155,7 +155,7 @@ export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerPro
                       src={similar.svg} 
                       alt={similar.name} 
                       style={{ 
-                        filter: theme === 'dark' ? 'invert(1)' : 'none'
+                        filter: theme === 'dark' ? 'invert(1)' : 'brightness(0)'
                       }}
                     />
                   </button>
