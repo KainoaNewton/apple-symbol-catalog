@@ -58,10 +58,11 @@ export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerPro
 
       if (type === "svg") {
         const blob = new Blob([svgText], { type: 'image/svg+xml' });
-        const clipboardItem = new ClipboardItem({
-          'image/svg+xml': blob
-        });
-        await navigator.clipboard.write([clipboardItem]);
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            'image/svg+xml': blob
+          })
+        ]);
       } else {
         await navigator.clipboard.writeText(svgText);
       }
