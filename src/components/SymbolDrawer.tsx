@@ -40,11 +40,14 @@ export const SymbolDrawer = ({ symbol, onClose }: SymbolDrawerProps) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <div
-                className="w-32 h-32 mx-auto mb-6"
-                style={{ color }}
-                dangerouslySetInnerHTML={{ __html: symbol.svg }}
-              />
+              <div className="w-32 h-32 mx-auto mb-6">
+                <img 
+                  src={symbol.svg} 
+                  alt={symbol.name}
+                  style={{ filter: `opacity(1) drop-shadow(0 0 0 ${color})` }}
+                  className="w-full h-full"
+                />
+              </div>
               
               <div className="space-y-4">
                 <div>
@@ -102,8 +105,9 @@ export const SymbolDrawer = ({ symbol, onClose }: SymbolDrawerProps) => {
                   <div
                     key={similar.id}
                     className="p-4 rounded-lg hover:bg-gray-100 transition-colors duration-200 aspect-square flex items-center justify-center"
-                    dangerouslySetInnerHTML={{ __html: similar.svg }}
-                  />
+                  >
+                    <img src={similar.svg} alt={similar.name} className="w-8 h-8" />
+                  </div>
                 ))}
               </div>
             </div>

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "1",
+    "name": "square.and.arrow.up",
+    "svg": "/symbols/square.and.arrow.up.svg",
+    "tags": ["share", "export", "upload"]
+  },
+  {
+    "id": "2",
+    "name": "square.and.arrow.down",
+    "svg": "/symbols/square.and.arrow.down.svg",
+    "tags": ["download", "save", "import"]
+  }
+]

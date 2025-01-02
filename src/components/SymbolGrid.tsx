@@ -17,8 +17,9 @@ export const SymbolGrid = ({ symbols }: SymbolGridProps) => {
             key={symbol.id}
             onClick={() => setSelectedSymbol(symbol)}
             className="p-4 rounded-lg hover:bg-gray-100 transition-colors duration-200 aspect-square flex items-center justify-center"
-            dangerouslySetInnerHTML={{ __html: symbol.svg }}
-          />
+          >
+            <img src={symbol.svg} alt={symbol.name} className="w-8 h-8" />
+          </button>
         ))}
       </div>
       <SymbolDrawer
