@@ -16,6 +16,10 @@ const Index = () => {
     setCurrentPage(prev => Math.min(prev + 1, totalPages));
   };
 
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -24,9 +28,9 @@ const Index = () => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            onClick={toggleTheme}
           >
-            {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
         </div>
       </header>
@@ -34,7 +38,7 @@ const Index = () => {
       <main className="container py-6">
         <SearchBar value={searchQuery} onChange={(value) => {
           setSearchQuery(value);
-          setCurrentPage(1); // Reset to first page on new search
+          setCurrentPage(1);
         }} />
         <SymbolGrid symbols={symbols} />
         {currentPage < totalPages && (

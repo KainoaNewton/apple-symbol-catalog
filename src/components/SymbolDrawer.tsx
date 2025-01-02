@@ -10,9 +10,10 @@ import { useTheme } from "@/components/ThemeProvider";
 interface SymbolDrawerProps {
   symbol: any;
   onClose: () => void;
+  onSymbolClick: (symbol: any) => void;
 }
 
-export const SymbolDrawer = ({ symbol, onClose }: SymbolDrawerProps) => {
+export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerProps) => {
   const [color, setColor] = useState("#000000");
   const { toast } = useToast();
   const { theme } = useTheme();
@@ -25,7 +26,6 @@ export const SymbolDrawer = ({ symbol, onClose }: SymbolDrawerProps) => {
     try {
       const response = await fetch(symbol.svg);
       let svgText = await response.text();
-      // Apply color if it's not the default
       if (color !== "#000000") {
         svgText = svgText.replace(/fill="([^"]*)"/, `fill="${color}"`);
       }
@@ -57,16 +57,23 @@ export const SymbolDrawer = ({ symbol, onClose }: SymbolDrawerProps) => {
       const response = await fetch(symbol.svg);
       let text = await response.text();
       
-      // Apply color if it's not the default
       if (color !== "#000000") {
         text = text.replace(/fill="([^"]*)"/, `fill="${color}"`);
       }
-      
-      await navigator.clipboard.writeText(type === "html" ? text : text.replace(/<\/?svg[^>]*>/g, ""));
+
+      if (type === "svg") {
+        // Create a blob and copy it to the clipboard as a file
+        const blob = new Blob([text], { type: 'image/svg+xml' });
+        const item = new ClipboardItem({ "image/svg+xml": blob });
+        await navigator.clipboard.write([item]);
+      } else {
+        // Copy as HTML
+        await navigator.clipboard.writeText(text);
+      }
       
       toast({
         title: "Success",
-        description: `${type === "html" ? "SVG HTML" : "SVG"} code copied to clipboard`,
+        description: `${type === "html" ? "SVG HTML" : "SVG file"} copied to clipboard`,
       });
     } catch (error) {
       toast({
@@ -142,8 +149,9 @@ export const SymbolDrawer = ({ symbol, onClose }: SymbolDrawerProps) => {
               <h3 className="text-lg font-medium mb-4">Similar Symbols</h3>
               <div className="grid grid-cols-4 gap-4">
                 {similarSymbols.map((similar) => (
-                  <div
+                  <button
                     key={similar.id}
+                    onClick={() => onSymbolClick(similar)}
                     className="p-4 rounded-xl bg-accent/50 hover:bg-accent transition-colors duration-200 aspect-square flex items-center justify-center"
                   >
                     <img 
@@ -151,7 +159,7 @@ export const SymbolDrawer = ({ symbol, onClose }: SymbolDrawerProps) => {
                       alt={similar.name} 
                       className={theme === "dark" ? "invert" : ""}
                     />
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
