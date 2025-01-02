@@ -21,7 +21,7 @@ export const SymbolGrid = ({ symbols }: SymbolGridProps) => {
             <img 
               src={symbol.svg} 
               alt={symbol.name} 
-              className="w-8 h-8 group-hover:scale-110 transition-transform duration-200 invert"
+              className="w-8 h-8 group-hover:scale-110 transition-transform duration-200 brightness-0 invert"
             />
             <div className="absolute bottom-1 left-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               <p className="text-xs truncate text-muted-foreground">{symbol.name}</p>

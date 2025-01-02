@@ -16,8 +16,9 @@ export const SymbolPreview = ({ symbol, color, onColorChange }: SymbolPreviewPro
         <img 
           src={symbol.svg} 
           alt={symbol.name}
+          className="w-full h-full"
           style={{ 
-            filter: color === "#000000" ? (theme === 'dark' ? 'invert(1)' : 'brightness(0)') : 'none',
+            filter: color === "#000000" ? 'brightness(0) invert(1)' : 'none',
             fill: color !== "#000000" ? color : undefined
           }}
         />
