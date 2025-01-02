@@ -1,13 +1,15 @@
 import { ThemeProvider } from "@/components/ThemeProvider"
-import { BrowserRouter } from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 import Index from "./pages/Index"
+import { Toaster } from "@/components/ui/toaster"
 
 function App() {
   return (
     <ThemeProvider defaultTheme="system" enableSystem>
-      <BrowserRouter>
-        <Index />
-      </BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Index />} />
+      </Routes>
+      <Toaster />
     </ThemeProvider>
   )
 }
