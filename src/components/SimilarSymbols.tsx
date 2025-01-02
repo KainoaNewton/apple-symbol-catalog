@@ -20,10 +20,8 @@ export const SimilarSymbols = ({ symbols, onSymbolClick }: SimilarSymbolsProps) 
           >
             <img 
               src={similar.svg} 
-              alt={similar.name} 
-              style={{ 
-                filter: theme === 'dark' ? 'invert(1)' : 'brightness(0)'
-              }}
+              alt={similar.name}
+              className="brightness-0 invert" 
             />
           </button>
         ))}

@@ -13,7 +13,7 @@ interface SymbolDrawerProps {
 }
 
 export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerProps) => {
-  const [color, setColor] = useState("#000000");
+  const [color, setColor] = useState("#ffffff");
   const { toast } = useToast();
   
   if (!symbol) return null;
@@ -55,19 +55,14 @@ export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerPro
       svgText = svgText.replace(/fill="([^"]*)"/, `fill="${color}"`);
 
       if (type === "svg") {
-        const blob = new Blob([svgText], { type: 'image/svg+xml' });
-        await navigator.clipboard.write([
-          new ClipboardItem({
-            'image/svg+xml': blob
-          })
-        ]);
+        await navigator.clipboard.writeText(svgText);
       } else {
         await navigator.clipboard.writeText(svgText);
       }
       
       toast({
         title: "Success",
-        description: `${type === "html" ? "SVG HTML" : "SVG file"} copied to clipboard`,
+        description: `${type === "html" ? "SVG HTML" : "SVG"} copied to clipboard`,
       });
     } catch (error) {
       toast({

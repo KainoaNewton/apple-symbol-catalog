@@ -1,5 +1,4 @@
 import { Input } from "@/components/ui/input";
-import { useTheme } from "@/components/ThemeProvider";
 
 interface SymbolPreviewProps {
   symbol: any;
@@ -8,8 +7,6 @@ interface SymbolPreviewProps {
 }
 
 export const SymbolPreview = ({ symbol, color, onColorChange }: SymbolPreviewProps) => {
-  const { theme } = useTheme();
-
   return (
     <div>
       <div className="aspect-square w-32 h-32 mx-auto mb-6 bg-accent/50 rounded-xl p-6 flex items-center justify-center">
@@ -18,8 +15,8 @@ export const SymbolPreview = ({ symbol, color, onColorChange }: SymbolPreviewPro
           alt={symbol.name}
           className="w-full h-full"
           style={{ 
-            filter: color === "#000000" ? 'brightness(0) invert(1)' : 'none',
-            fill: color !== "#000000" ? color : undefined
+            filter: color === "#ffffff" ? 'brightness(0) invert(1)' : 'none',
+            fill: color !== "#ffffff" ? color : undefined
           }}
         />
       </div>
