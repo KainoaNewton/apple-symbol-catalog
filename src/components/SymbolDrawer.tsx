@@ -3,13 +3,8 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { findSimilarSymbols } from "@/data/sf-symbols";
-import { Download, Copy, ChevronDown } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Download, Copy } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 interface SymbolDrawerProps {
   symbol: any;
@@ -18,17 +13,55 @@ interface SymbolDrawerProps {
 
 export const SymbolDrawer = ({ symbol, onClose }: SymbolDrawerProps) => {
   const [color, setColor] = useState("#000000");
+  const { toast } = useToast();
   
   if (!symbol) return null;
 
   const similarSymbols = findSimilarSymbols(symbol.name);
 
-  const handleDownload = (format = 'svg') => {
-    console.log(`Downloading ${symbol.name} in ${format} format`);
+  const handleDownload = async () => {
+    try {
+      const response = await fetch(symbol.svg);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${symbol.name}.svg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      
+      toast({
+        title: "Success",
+        description: "SVG downloaded successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to download SVG",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleCopy = (format = 'svg') => {
-    console.log(`Copying ${symbol.name} in ${format} format`);
+  const handleCopy = async () => {
+    try {
+      const response = await fetch(symbol.svg);
+      const text = await response.text();
+      await navigator.clipboard.writeText(text);
+      
+      toast({
+        title: "Success",
+        description: "SVG code copied to clipboard",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to copy SVG",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -62,47 +95,23 @@ export const SymbolDrawer = ({ symbol, onClose }: SymbolDrawerProps) => {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="w-full">
-                        <Download className="mr-2 h-4 w-4" />
-                        Download
-                        <ChevronDown className="ml-2 h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem onClick={() => handleDownload('svg')}>
-                        SVG
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleDownload('png')}>
-                        PNG
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleDownload('jpg')}>
-                        JPG
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <Button 
+                    variant="outline" 
+                    onClick={handleDownload}
+                    className="w-full"
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    Download SVG
+                  </Button>
 
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="w-full">
-                        <Copy className="mr-2 h-4 w-4" />
-                        Copy
-                        <ChevronDown className="ml-2 h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem onClick={() => handleCopy('svg')}>
-                        SVG
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleCopy('png')}>
-                        PNG
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleCopy('jpg')}>
-                        JPG
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <Button 
+                    variant="outline" 
+                    onClick={handleCopy}
+                    className="w-full"
+                  >
+                    <Copy className="mr-2 h-4 w-4" />
+                    Copy SVG
+                  </Button>
                 </div>
               </div>
             </div>
