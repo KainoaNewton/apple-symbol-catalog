@@ -24,7 +24,11 @@ export const SymbolGrid = ({ symbols }: SymbolGridProps) => {
               src={symbol.svg} 
               alt={symbol.name} 
               className={`w-8 h-8 group-hover:scale-110 transition-transform duration-200 ${theme === 'dark' ? 'invert' : ''}`}
-              style={{ filter: `opacity(1) drop-shadow(0 0 0 ${theme === 'dark' ? '#ffffff' : '#000000'})` }}
+              style={{ 
+                filter: theme === 'dark' 
+                  ? 'invert(1)' 
+                  : 'brightness(0) saturate(100%)' // Makes symbols darker in light mode
+              }}
             />
             <div className="absolute bottom-1 left-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               <p className="text-xs truncate text-muted-foreground">{symbol.name}</p>

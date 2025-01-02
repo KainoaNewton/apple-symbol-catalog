@@ -98,8 +98,11 @@ export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerPro
                 <img 
                   src={symbol.svg} 
                   alt={symbol.name}
-                  className={theme === "dark" ? "invert" : ""}
-                  style={{ filter: `opacity(1) drop-shadow(0 0 0 ${color})` }}
+                  style={{ 
+                    filter: theme === 'dark' 
+                      ? 'invert(1)' 
+                      : 'brightness(0) saturate(100%)'
+                  }}
                 />
               </div>
               
@@ -157,7 +160,11 @@ export const SymbolDrawer = ({ symbol, onClose, onSymbolClick }: SymbolDrawerPro
                     <img 
                       src={similar.svg} 
                       alt={similar.name} 
-                      className={theme === "dark" ? "invert" : ""}
+                      style={{ 
+                        filter: theme === 'dark' 
+                          ? 'invert(1)' 
+                          : 'brightness(0) saturate(100%)'
+                      }}
                     />
                   </button>
                 ))}

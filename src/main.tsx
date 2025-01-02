@@ -7,7 +7,7 @@ import './index.css';
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <App />
       <Toaster />
     </ThemeProvider>
