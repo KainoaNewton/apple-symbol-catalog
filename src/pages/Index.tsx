@@ -32,16 +32,19 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center">
-          <h1 className="text-xl font-bold">SF Symbols Catalog</h1>
+        <div className="container flex h-14 items-center gap-4">
+          <h1 className="text-xl font-bold whitespace-nowrap">SF Symbols Catalog</h1>
+          <SearchBar 
+            value={searchQuery} 
+            onChange={(value) => {
+              setSearchQuery(value);
+              setCurrentPage(1);
+            }} 
+          />
         </div>
       </header>
 
       <main className="container py-6">
-        <SearchBar value={searchQuery} onChange={(value) => {
-          setSearchQuery(value);
-          setCurrentPage(1);
-        }} />
         <SymbolGrid symbols={displayedSymbols} />
         {currentPage < totalPages && (
           <div className="mt-8 flex justify-center">
