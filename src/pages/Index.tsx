@@ -3,35 +3,37 @@ import { SearchBar } from "@/components/SearchBar";
 import { SymbolGrid } from "@/components/SymbolGrid";
 import { searchSymbols } from "@/utils/search";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "@/components/ThemeProvider";
+import { sfSymbols } from "@/data/sf-symbols";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const { setTheme, theme } = useTheme();
+  const [loadedSymbols, setLoadedSymbols] = useState<typeof sfSymbols>([]);
   const { symbols, totalPages } = searchSymbols(searchQuery, currentPage);
 
   const handleLoadMore = () => {
-    setCurrentPage(prev => Math.min(prev + 1, totalPages));
+    const nextPage = currentPage + 1;
+    if (nextPage <= totalPages) {
+      const { symbols: newSymbols } = searchSymbols(searchQuery, nextPage);
+      setLoadedSymbols(prev => [...prev, ...newSymbols]);
+      setCurrentPage(nextPage);
+    }
   };
 
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
+  // Update loadedSymbols when search query changes
+  React.useEffect(() => {
+    const { symbols: initialSymbols } = searchSymbols(searchQuery, 1);
+    setLoadedSymbols(initialSymbols);
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  const displayedSymbols = currentPage === 1 ? symbols : loadedSymbols;
 
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center justify-between">
+        <div className="container flex h-14 items-center">
           <h1 className="text-xl font-bold">SF Symbols Catalog</h1>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleTheme}
-          >
-            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </Button>
         </div>
       </header>
 
@@ -40,7 +42,7 @@ const Index = () => {
           setSearchQuery(value);
           setCurrentPage(1);
         }} />
-        <SymbolGrid symbols={symbols} />
+        <SymbolGrid symbols={displayedSymbols} />
         {currentPage < totalPages && (
           <div className="mt-8 flex justify-center">
             <Button 

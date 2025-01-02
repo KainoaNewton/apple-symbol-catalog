@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { sfSymbols } from "@/data/sf-symbols";
 import { SymbolDrawer } from "./SymbolDrawer";
-import { useTheme } from "@/components/ThemeProvider";
 
 interface SymbolGridProps {
   symbols: typeof sfSymbols;
@@ -9,7 +8,6 @@ interface SymbolGridProps {
 
 export const SymbolGrid = ({ symbols }: SymbolGridProps) => {
   const [selectedSymbol, setSelectedSymbol] = useState<(typeof sfSymbols)[0] | null>(null);
-  const { theme } = useTheme();
 
   return (
     <>
@@ -23,10 +21,7 @@ export const SymbolGrid = ({ symbols }: SymbolGridProps) => {
             <img 
               src={symbol.svg} 
               alt={symbol.name} 
-              className="w-8 h-8 group-hover:scale-110 transition-transform duration-200"
-              style={{ 
-                filter: theme === 'dark' ? 'invert(1)' : 'brightness(0)',
-              }}
+              className="w-8 h-8 group-hover:scale-110 transition-transform duration-200 invert"
             />
             <div className="absolute bottom-1 left-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               <p className="text-xs truncate text-muted-foreground">{symbol.name}</p>
