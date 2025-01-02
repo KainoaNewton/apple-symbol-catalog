@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SearchBar } from "@/components/SearchBar";
 import { SymbolGrid } from "@/components/SymbolGrid";
 import { searchSymbols } from "@/utils/search";
@@ -21,7 +21,7 @@ const Index = () => {
   };
 
   // Update loadedSymbols when search query changes
-  React.useEffect(() => {
+  useEffect(() => {
     const { symbols: initialSymbols } = searchSymbols(searchQuery, 1);
     setLoadedSymbols(initialSymbols);
     setCurrentPage(1);
