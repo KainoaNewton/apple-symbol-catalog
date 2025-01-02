@@ -33,6 +33,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-14 items-center gap-4">
+          <img src="/logo.svg" className="h-10 mr-2" />
           <h1 className="text-xl font-bold whitespace-nowrap">SF Symbols Catalog</h1>
           <SearchBar 
             value={searchQuery} 
